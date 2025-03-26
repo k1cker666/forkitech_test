@@ -16,3 +16,8 @@ class TRXAddressSchema(TRXAddressAddSchema):
 
     id: int
     added_at: datetime
+
+class TRXAdressInfoSchema(TRXAddressAddSchema):
+    trx_balance: float
+    bandwidth: int
+    energy: int

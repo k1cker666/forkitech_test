@@ -1,10 +1,12 @@
 from typing import List
 from fastapi import FastAPI, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
+from tronpy import AsyncTron
 
 from repository import TRXRepository
-from db import get_session
-from schema import TRXAddressAddSchema, TRXAddressSchema
+from deps import get_session, get_client
+from schema import TRXAddressAddSchema, TRXAddressSchema, TRXAdressInfoSchema
+from service import TronClient
 from models import create_db
 
 
@@ -13,14 +15,22 @@ app = FastAPI()
 async def get_repository(session: AsyncSession = Depends(get_session)):
     return TRXRepository(session)
 
+async def get_tron_client(client: AsyncTron = Depends(get_client)):
+    return TronClient(client)
+
 @app.post(
     "/get_address_info",
     summary="Получить информацию по адресу TRX кошелька",
     description="Эндпоинт возвращает bandwidth, energy, и баланс trx",
 )
-async def get_address_info(data: TRXAddressAddSchema, repo: TRXRepository = Depends(get_repository)):
+async def get_address_info(
+    data: TRXAddressAddSchema,
+    repo: TRXRepository = Depends(get_repository),
+    client: TronClient = Depends(get_tron_client)
+) -> TRXAdressInfoSchema:
     await repo.add_address(data.trx_address)
-    return {"address": data.trx_address}
+    account_info = await client.get_account_info(data.trx_address)
+    return account_info
 
 @app.get(
     "/get_reqests",

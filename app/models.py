@@ -3,7 +3,7 @@ from datetime import datetime
 from sqlalchemy import String, DateTime
 from sqlalchemy.orm import DeclarativeBase, mapped_column, Mapped
 
-from db import engine
+from deps import engine
 
 
 class Base(DeclarativeBase):
