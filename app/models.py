@@ -1,3 +1,6 @@
+from datetime import datetime
+
+from sqlalchemy import String, DateTime
 from sqlalchemy.orm import DeclarativeBase, mapped_column, Mapped
 
 from db import engine
@@ -11,7 +14,8 @@ class TRXAdressModel(Base):
     __tablename__ = "trx_adress"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    trx_adress: Mapped[str] = mapped_column()
+    trx_adress: Mapped[str] = mapped_column(String(34))
+    added_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), default=datetime.now())
 
 
 async def create_db():
