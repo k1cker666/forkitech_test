@@ -10,11 +10,11 @@ class Base(DeclarativeBase):
     pass
 
 
-class TRXAdressModel(Base):
-    __tablename__ = "trx_adress"
+class TRXAddressModel(Base):
+    __tablename__ = "trx_address"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    trx_adress: Mapped[str] = mapped_column(String(34))
+    trx_address: Mapped[str] = mapped_column(String(34))
     added_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), default=datetime.now())
 
 
