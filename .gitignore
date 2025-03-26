@@ -11,3 +11,4 @@ wheels/
 
 test.py
 .env
+.ruff_cache

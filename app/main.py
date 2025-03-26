@@ -33,15 +33,10 @@ async def get_address_info(
     return account_info
 
 @app.get(
-    "/get_reqests",
+    "/get_requests",
     summary="Получить список запросов к сервису",
     description="Эндпоинт возвращает список кошельков, по которым запрашивалась информация",
 )
 async def get_requests(repo: TRXRepository = Depends(get_repository)) -> List[TRXAddressSchema]:
     result = await repo.get_all_addresses()
     return [TRXAddressSchema.model_validate(addr) for addr in result]
-
-
-@app.post("/db")
-async def db() -> None:
-    await create_db()
