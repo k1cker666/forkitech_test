@@ -1,7 +1,8 @@
 from typing import List
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from tronpy import AsyncTron
+from tronpy.exceptions import BadAddress
 
 from repository import TRXRepository
 from deps import get_session, get_client
@@ -27,8 +28,16 @@ async def get_address_info(
     repo: TRXRepository = Depends(get_repository),
     client: TronClient = Depends(get_tron_client)
 ) -> TRXAdressInfoSchema:
-    await repo.add_address(data.trx_address)
-    account_info = await client.get_account_info(data.trx_address)
+    try:
+        await repo.add_address(data.trx_address)
+        account_info = await client.get_account_info(data.trx_address)
+    except BadAddress as e:
+        await repo.rollback()
+        raise HTTPException(status_code=400, detail="Bad trx address")
+    except Exception:
+        await repo.rollback()
+        raise HTTPException(status_code=500, detail="Something went wrong")
+    await repo.commit()
     return account_info
 
 @app.get(

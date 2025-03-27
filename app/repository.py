@@ -11,10 +11,15 @@ class TRXRepository:
     async def add_address(self, trx_address: str) -> TRXAddressModel:
         new_address = TRXAddressModel(trx_address=trx_address)
         self.session.add(new_address)
-        await self.session.commit()
         return new_address
 
     async def get_all_addresses(self) -> Sequence[TRXAddressModel]:
         query = select(TRXAddressModel)
         result = await self.session.execute(query)
         return result.scalars().all()
+
+    async def commit(self):
+        await self.session.commit()
+
+    async def rollback(self):
+        await self.session.rollback()

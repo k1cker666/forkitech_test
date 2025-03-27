@@ -10,5 +10,4 @@ wheels/
 .venv
 
 test.py
-.env
 .ruff_cache
