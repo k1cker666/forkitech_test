@@ -8,3 +8,12 @@ services:
       POSTGRES_PASSWORD: "postgres"
     ports:
       - "5001:5432"
+
+  postgres_test:
+    image: postgres:17.4-alpine3.21
+    environment:
+      POSTGRES_DB: "test_db"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+    ports:
+      - "5002:5432"
