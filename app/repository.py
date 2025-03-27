@@ -13,8 +13,9 @@ class TRXRepository:
         self.session.add(new_address)
         return new_address
 
-    async def get_all_addresses(self) -> Sequence[TRXAddressModel]:
-        query = select(TRXAddressModel)
+    async def get_all_addresses(self, size, page) -> Sequence[TRXAddressModel]:
+        offset = size*(page-1)
+        query = select(TRXAddressModel).limit(size).offset(offset)
         result = await self.session.execute(query)
         return result.scalars().all()
 

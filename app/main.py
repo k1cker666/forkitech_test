@@ -1,5 +1,5 @@
 from typing import List
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from tronpy import AsyncTron
 from tronpy.exceptions import BadAddress
@@ -45,6 +45,10 @@ async def get_address_info(
     summary="Получить список запросов к сервису",
     description="Эндпоинт возвращает список кошельков, по которым запрашивалась информация",
 )
-async def get_requests(repo: TRXRepository = Depends(get_repository)) -> List[TRXAddressSchema]:
-    result = await repo.get_all_addresses()
+async def get_requests(
+    repo: TRXRepository = Depends(get_repository),
+    size: int = Query(5, ge=1, le=100),
+    page: int = Query(1, ge=1)
+) -> List[TRXAddressSchema]:
+    result = await repo.get_all_addresses(size=size, page=page)
     return [TRXAddressSchema.model_validate(addr) for addr in result]
