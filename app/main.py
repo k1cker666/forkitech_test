@@ -7,7 +7,6 @@ from repository import TRXRepository
 from deps import get_session, get_client
 from schema import TRXAddressAddSchema, TRXAddressSchema, TRXAdressInfoSchema
 from service import TronClient
-from models import create_db
 
 
 app = FastAPI()
