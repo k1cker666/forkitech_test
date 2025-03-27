@@ -9,12 +9,12 @@ async def test_add_address_success(session, setup_db):
     test_address = "TKESvnc7KfKRP7me56twasvAtxLK3ptXEv"
 
     result = await repo.add_address(test_address)
+    await repo.commit()
 
     assert result.id is not None
     assert result.trx_address == test_address
 
     check_result = await session.get(TRXAddressModel, result.id)
-    print(repr(check_result))
 
     assert check_result is not None
     assert check_result.trx_address == test_address
